@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apply to join xSeeding</title>
+<link rel="icon" href="/static/lumi-orb.svg">
+<style>
+:root{--bg:#0b0a14;--card:#141225;--line:#2a2744;--ink:#e8e6f0;--mute:#9a96b8;--glow:#7fd6ff;--ok:#5ce0a0;--warn:#ffc857}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 600px at 70% -10%,#1d1a3a 0%,var(--bg) 60%);color:var(--ink);font:16px/1.55 system-ui,Segoe UI,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:40px 20px 80px}h1{font-size:34px;margin:0 0 6px;letter-spacing:-.5px}h2{font-size:20px;margin:34px 0 10px}
+.lead{color:var(--mute);font-size:18px;margin:0 0 22px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:16px 0}
+label{display:block;margin:14px 0 6px;font-weight:600}input[type=text],input[type=email],textarea{width:100%;background:#0f0e1c;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit}
+textarea{min-height:120px}.hint{color:var(--mute);font-size:14px;margin-top:4px}.src{display:flex;gap:12px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#100f1e}
+.src input{margin-top:5px;transform:scale(1.3)}.btn{display:inline-block;background:var(--glow);color:#06121a;font-weight:700;border:0;border-radius:12px;padding:14px 22px;font:inherit;cursor:pointer}
+.btn[disabled]{opacity:.5;cursor:wait}.ghost{background:transparent;color:var(--glow);border:1px solid var(--glow)}.ok{color:var(--ok)}.warn{color:var(--warn)}
+.what li{margin:6px 0}.orb{width:54px;height:54px;vertical-align:middle;margin-right:10px;filter:drop-shadow(0 0 18px rgba(127,214,255,.55))}
+.hp{position:absolute;left:-9999px;top:-9999px}#done{display:none}a{color:var(--glow)}.small{font-size:14px;color:var(--mute)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1><img class="orb" src="/static/lumi-orb.svg" alt="">Apply to join xSeeding</h1>
+  <p class="lead">A small team building Lumi (a local AI that runs on your own machine) and xOS (its own operating system, on its own compiled kernel). People on the stream asked how to help. This is the door.</p>
+
+  <div class="card what">
+    <h2 style="margin-top:0">What we look for</h2>
+    <ul>
+      <li><b>People who ship.</b> Something you made that works - a tool, a script, a video, a repair, a design. Size does not matter; finished does.</li>
+      <li><b>Picky testers.</b> You notice the cut-off label, the button that does nothing, the step a stranger would get stuck on.</li>
+      <li><b>Clear writers.</b> You can explain a thing in plain words to someone who is lost.</li>
+      <li><b>Local-first, privacy-first.</b> You like AI that lives on the machine, not in someone's cloud.</li>
+      <li><b>Honest about what you know.</b> "I don't know yet, but I'll find out" is a great answer here.</li>
+    </ul>
+    <p class="small">No CV needed. Show us a thing. The whole team setup is open source, so there is no mystery about what we are looking for or what happens with your application: <a href="https://github.com/godly-juice/xseeding-apply" target="_blank" rel="noopener">the code</a>.</p>
+  </div>
+
+  <form id="f" class="card" enctype="multipart/form-data">
+    <h2 style="margin-top:0">About you</h2>
+    <label for="name">Name or handle you go by</label><input type="text" id="name" name="name" required maxlength="120">
+    <label for="reach">How do we reach you? (Discord handle, e-mail, anything that works)</label><input type="text" id="reach" name="reach" required maxlength="300">
+    <label for="why">What makes you valuable to this team? What have you built, fixed or finished?</label><textarea id="why" name="why" required minlength="20" maxlength="6000"></textarea>
+    <label for="links">Links (LinkedIn, GitHub, portfolio, a video, anything you are proud of) - one per line</label><textarea id="links" name="links" maxlength="3000" style="min-height:80px"></textarea>
+    <label for="handles">Other handles we may search for (optional, e.g. your GitHub user, your X/YouTube name)</label><input type="text" id="handles" name="handles" maxlength="500">
+    <label for="files">Drop files (up to 5, 25 MB each: PDF, images, docs, a short video)</label><input type="file" id="files" name="files" multiple>
+    <input class="hp" type="text" name="website_url" tabindex="-1" autocomplete="off">
+
+    <h2>Lumi will read about you - only where you say yes</h2>
+    <p class="hint">An AI (Lumi, running on our own machine, not a cloud service) writes a first summary for the human who reads your application. She only looks where you tick. <b>Ticking nothing is fine</b> - a human reads every application anyway. Here is exactly where the data would come from:</p>
+    <div id="sources"></div>
+    <p class="hint">Everything is kept for <span id="keep">90</span> days or until you delete it (you get a delete link right after sending). It is never sold or shared. Details: <a href="/privacy" target="_blank">what we store and how to delete it</a>.</p>
+
+    <label class="src"><input type="checkbox" name="adult" value="yes" required><span>I am 18 or older.</span></label>
+    <label class="src"><input type="checkbox" id="agree" required><span>I read the list above; Lumi may use only the sources I ticked, and I can delete everything with my link.</span></label>
+    <input type="hidden" name="agreed_text" id="agreed_text">
+    <p style="margin-top:20px"><button class="btn" id="send" type="submit">Send my application</button></p>
+    <p class="small" id="err"></p>
+  </form>
+
+  <div class="card" id="done">
+    <h2 style="margin-top:0" class="ok">Sent. Thank you.</h2>
+    <p>A human will read it. Keep this delete link - it removes your application and every file with it, no questions asked:</p>
+    <p><a id="dl" href="#"></a></p>
+    <div id="gbox" style="display:none"><p>Optional: connect your Google Drive <b>read-only</b> so Lumi can read documents you keep there (you can disconnect any time in your Google account):</p><p><a class="btn ghost" id="gl" href="#">Connect Google Drive (read-only)</a></p></div>
+  </div>
+  <p class="small">xSeeding - Lumi and xOS. <a href="/privacy">Privacy</a></p>
+</div>
+<script>
+(async()=>{
+  const cfg=await (await fetch('/api/config')).json();
+  document.getElementById('keep').textContent=cfg.keep_days;
+  document.getElementById('sources').innerHTML=cfg.sources.filter(s=>s.id!=='google'||cfg.google).map(s=>
+    '<label class="src"><input type="checkbox" name="src_'+s.id+'" value="yes"><span>'+s.text+'</span></label>').join('');
+  const f=document.getElementById('f'),btn=document.getElementById('send'),err=document.getElementById('err');
+  f.addEventListener('submit',async e=>{
+    e.preventDefault();err.textContent='';btn.disabled=true;
+    document.getElementById('agreed_text').value=[...document.querySelectorAll('#sources label')].map(l=>(l.querySelector('input').checked?'[yes] ':'[no] ')+l.textContent.trim()).join('\n');
+    try{
+      const r=await fetch('/api/apply',{method:'POST',body:new FormData(f)});const j=await r.json();
+      if(!j.ok){err.textContent=j.error||'something went wrong';btn.disabled=false;return;}
+      f.style.display='none';const d=document.getElementById('done');d.style.display='block';
+      const a=document.getElementById('dl');a.href=j.delete_link;a.textContent=j.delete_link;
+      if(j.google_link){document.getElementById('gbox').style.display='block';document.getElementById('gl').href=j.google_link;}
+      window.scrollTo(0,0);
+    }catch(x){err.textContent='could not send - try again';btn.disabled=false;}
+  });
+})();
+</script>
+</body>
+</html>
